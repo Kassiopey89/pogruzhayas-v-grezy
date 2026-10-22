@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080c16"><meta name="robots" content="index,follow">
+<title>Погружаясь в грёзы</title>
+<style>
+:root{color-scheme:dark;--ink:#e0e7f6;--muted:#8795b2;--line:#28344d;--glow:#a9c3ff}
+*{box-sizing:border-box} body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% 24%,#17243d 0,#0b1120 38%,#05080f 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;display:grid;place-items:center;padding:26px;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.23;background-image:radial-gradient(1px 1px at 12% 18%,#fff 99%,transparent),radial-gradient(1px 1px at 83% 22%,#fff 99%,transparent),radial-gradient(1px 1px at 72% 68%,#fff 99%,transparent),radial-gradient(1px 1px at 23% 77%,#fff 99%,transparent);background-size:190px 170px}
+main{width:min(100%,490px);position:relative;text-align:center;padding:12px 0 20px}.eyebrow{font:10px/1.8 system-ui,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#7584a3;margin:0 0 24px}.cover{width:min(100%,360px);aspect-ratio:1;object-fit:cover;border:1px solid #34415a;border-radius:5px;box-shadow:0 25px 80px #0009;margin:0 auto 27px;display:block}.title{font-size:clamp(30px,7vw,42px);font-weight:normal;letter-spacing:.01em;margin:0 0 9px}.artist{font:14px system-ui,sans-serif;letter-spacing:.18em;color:#9aa9c6;margin:0 0 26px}.rule{height:1px;width:34px;background:#627392;margin:0 auto 24px}.play{width:66px;height:66px;border:1px solid #a5bcf3;border-radius:50%;background:#0b1222;color:#e5edff;font-size:24px;cursor:pointer;box-shadow:0 0 25px #7298e733;transition:transform .2s,background .2s}.play:hover{transform:scale(1.05);background:#172440}.play:focus-visible,input:focus-visible{outline:2px solid var(--glow);outline-offset:4px}.timeline{display:flex;align-items:center;gap:12px;margin:25px 0 8px;font:11px system-ui,sans-serif;color:#a3b0c9}.timeline input{width:100%;accent-color:#b7caff;cursor:pointer}.volume{display:flex;align-items:center;gap:13px;width:min(100%,270px);margin:14px auto 0;color:#9aa9c6;font:11px system-ui,sans-serif}.volume input{flex:1;min-width:0;accent-color:#b7caff;cursor:pointer}.volume-value{width:34px;text-align:right;font-variant-numeric:tabular-nums}.quote{font-size:13px;font-style:italic;line-height:1.9;letter-spacing:.05em;color:#8998b5;margin:30px auto 0;max-width:330px}.foot{margin-top:45px;color:#5d6a85;font:10px system-ui,sans-serif;letter-spacing:.12em}.note{margin-top:16px;color:#71809c;font:11px/1.6 system-ui,sans-serif}
+</style></head><body><main>
+<p class="eyebrow">Музыка моего состояния</p>
+<img class="cover" src="cover.png" alt="Ночное, туманное пространство под луной">
+<h1 class="title">Погружаясь в грёзы</h1><p class="artist">Moayad Aljabal</p><div class="rule"></div>
+<audio id="audio" preload="metadata" loop><source src="track.mp3" type="audio/mpeg">Ваш браузер не поддерживает воспроизведение аудио.</audio>
+<button class="play" id="play" aria-label="Воспроизвести" title="Воспроизвести">▶</button>
+<div class="timeline"><span id="current">0:00</span><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Позиция воспроизведения"><span id="duration">—:—</span></div>
+<div class="volume"><span aria-hidden="true">♫</span><input id="volume" type="range" min="0" max="100" value="25" aria-label="Громкость"><span class="volume-value" id="volumeValue">25%</span></div>
+<p class="quote">Иногда музыка становится тем местом,<br>где можно побыть собой.<br>Это — одно из таких мест.</p>
+<p class="foot">СЛУШАЙ. ЧУВСТВУЙ. ПОГРУЖАЙСЯ.</p><p class="note">Звук начнётся только после нажатия на кнопку.</p>
+</main><script>
+const a=document.getElementById('audio'),p=document.getElementById('play'),s=document.getElementById('seek'),c=document.getElementById('current'),d=document.getElementById('duration'),v=document.getElementById('volume'),vv=document.getElementById('volumeValue');
+a.volume=0.25;
+v.addEventListener('input',()=>{a.volume=Number(v.value)/100;vv.textContent=v.value+'%'});
+const fmt=n=>{if(!Number.isFinite(n))return '—:—';return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')};
+p.addEventListener('click',async()=>{if(a.paused){try{await a.play()}catch(e){p.textContent='!';p.title='Не удалось запустить аудио';return}}else a.pause()});
+a.addEventListener('play',()=>{p.textContent='Ⅱ';p.setAttribute('aria-label','Пауза');p.title='Пауза'});a.addEventListener('pause',()=>{p.textContent='▶';p.setAttribute('aria-label','Воспроизвести');p.title='Воспроизвести'});
+a.addEventListener('loadedmetadata',()=>d.textContent=fmt(a.duration));a.addEventListener('timeupdate',()=>{c.textContent=fmt(a.currentTime);if(Number.isFinite(a.duration)&&a.duration>0)s.value=String(a.currentTime/a.duration*1000)});s.addEventListener('input',()=>{if(Number.isFinite(a.duration))a.currentTime=Number(s.value)/1000*a.duration});
+</script></body></html>
